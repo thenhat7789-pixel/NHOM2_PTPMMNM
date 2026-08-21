@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập Tài Khoản | Modern Login</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #07090e;
+            --card-bg: rgba(18, 24, 38, 0.75);
+            --card-border: rgba(255, 255, 255, 0.1);
+            
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #06b6d4 100%);
+            --accent-purple: #a855f7;
+            --accent-blue: #6366f1;
+            --accent-cyan: #06b6d4;
+            
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-muted: #64748b;
+
+            --input-bg: rgba(10, 14, 23, 0.7);
+            --input-border: rgba(255, 255, 255, 0.08);
+            --input-focus: #6366f1;
+
+            --radius-lg: 24px;
+            --radius-md: 14px;
+            
+            --shadow-glow: 0 0 35px rgba(99, 102, 241, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- Ambient Animated Orbs --- */
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: 0;
+            pointer-events: none;
+            animation: pulseOrb 8s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            top: -100px;
+            left: -100px;
+            width: 450px;
+            height: 450px;
+            background: rgba(99, 102, 241, 0.25);
+        }
+
+        .orb-2 {
+            bottom: -120px;
+            right: -100px;
+            width: 450px;
+            height: 450px;
+            background: rgba(6, 182, 212, 0.25);
+            animation-delay: -4s;
+        }
+
+        @keyframes pulseOrb {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.15) translate(30px, 30px); }
+        }
+
+        /* --- Main Card Container --- */
+        .login-card {
+            width: 100%;
+            max-width: 460px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 3rem 2.5rem;
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(25px);
+            z-index: 1;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        /* Top Glowing Line */
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        /* Header Logo & Title */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 2.2rem;
+        }
+
+        .brand-icon {
+            width: 54px;
+            height: 54px;
+            background: var(--primary-gradient);
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-glow);
+            margin-bottom: 1rem;
+            animation: floatIcon 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatIcon {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-6px); }
+        }
+
+        .brand-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            margin-top: 6px;
+        }
+
+        /* Tabs Switcher */
+        .tab-switcher {
+            display: flex;
+            background: rgba(10, 14, 23, 0.6);
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-md);
+            padding: 4px;
+            margin-bottom: 1.8rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1.4rem;
+        }
+
+        .form-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+        }
+
+        .forgot-link {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .forgot-link:hover {
+            color: var(--accent-purple);
+            text-decoration: underline;
+        }
+
+        .input-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-box i.input-icon {
+            position: absolute;
+            left: 16px;
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px 14px 46px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            background: rgba(10, 14, 23, 0.9);
+        }
+
+        .form-input:focus ~ i.input-icon {
+            color: var(--accent-blue);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .toggle-password:hover {
+            color: var(--text-main);
+        }
+
+        /* Checkbox */
+        .remember-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.6rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .custom-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .remember-row input {
+            display: none;
+        }
+
+        .remember-row input:checked + .custom-checkbox {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .custom-checkbox i {
+            color: white;
+            font-size: 0.7rem;
+            display: none;
+        }
+
+        .remember-row input:checked + .custom-checkbox i {
+            display: block;
+        }
+
+        .remember-label {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.92;
+            transform: translateY(-2px);
+            box-shadow: 0 0 45px rgba(99, 102, 241, 0.45);
+        }
+
+        /* Divider & Social Login */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.8rem 0;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--card-border);
+        }
+
+        .divider span {
+            padding: 0 12px;
+        }
+
+        .social-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .social-btn {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .social-btn.google:hover { color: #ea4335; }
+        .social-btn.github:hover { color: #ffffff; }
+        .social-btn.facebook:hover { color: #1877f2; }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: rgba(18, 24, 38, 0.95);
+            border: 1px solid var(--accent-cyan);
+            color: white;
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            backdrop-filter: blur(15px);
+            transform: translateX(120%);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast i {
+            color: var(--accent-cyan);
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Glowing Orbs -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+
+    <!-- Login Card -->
+    <div class="login-card">
+        <!-- Header -->
+        <div class="brand-header">
+            <div class="brand-icon">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <h1 class="brand-title" id="formTitle">Chào mừng trở lại</h1>
+            <p class="brand-subtitle" id="formSubtitle">Vui lòng nhập thông tin để đăng nhập tài khoản</p>
+        </div>
+
+        <!-- Tab Switcher -->
+        <div class="tab-switcher">
+            <button class="tab-btn active" id="tabLogin" onclick="switchForm('login')">Đăng Nhập</button>
+            <button class="tab-btn" id="tabRegister" onclick="switchForm('register')">Đăng Ký</button>
+        </div>
+
+        <!-- Login / Register Form -->
+        <form id="authForm" onsubmit="handleFormSubmit(event)">
+            <!-- Extra Fullname field for Register mode -->
+            <div class="form-group" id="fullNameGroup" style="display: none;">
+                <label class="form-label">Họ và Tên</label>
+                <div class="input-box">
+                    <input type="text" class="form-input" id="fullNameInput" placeholder="Nguyễn Văn A">
+                    <i class="fa-regular fa-id-badge input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email hoặc Tên đăng nhập</label>
+                <div class="input-box">
+                    <input type="text" class="form-input" id="emailInput" placeholder="name@example.com" value="thenhat7789@gmail.com" required>
+                    <i class="fa-regular fa-envelope input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <span>Mật khẩu</span>
+                    <a href="#" class="forgot-link" id="forgotLink" onclick="forgotPassword(event)">Quên mật khẩu?</a>
+                </label>
+                <div class="input-box">
+                    <input type="password" class="form-input" id="passwordInput" placeholder="••••••••" value="12345678" required>
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <i class="fa-regular fa-eye toggle-password" id="togglePasswordBtn" onclick="togglePasswordVisibility()"></i>
+                </div>
+            </div>
+
+            <!-- Remember Me Row -->
+            <label class="remember-row" id="rememberRow">
+                <input type="checkbox" checked>
+                <div class="custom-checkbox">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <span class="remember-label">Ghi nhớ đăng nhập trên thiết bị này</span>
+            </label>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span>Đăng Nhập Ngay</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <!-- Social Login -->
+        <div class="divider">
+            <span>Hoặc đăng nhập bằng</span>
+        </div>
+
+        <div class="social-group">
+            <button class="social-btn google" title="Google" onclick="socialLogin('Google')">
+                <i class="fa-brands fa-google"></i>
+            </button>
+            <button class="social-btn github" title="GitHub" onclick="socialLogin('GitHub')">
+                <i class="fa-brands fa-github"></i>
+            </button>
+            <button class="social-btn facebook" title="Facebook" onclick="socialLogin('Facebook')">
+                <i class="fa-brands fa-facebook-f"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-circle-check" id="toastIcon"></i>
+        <span id="toastMessage">Đăng nhập thành công!</span>
+    </div>
+
+    <script>
+        let currentMode = 'login';
+
+        // Toggle Password Visibility
+        function togglePasswordVisibility() {
+            const pwdInput = document.getElementById('passwordInput');
+            const toggleBtn = document.getElementById('togglePasswordBtn');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                toggleBtn.classList.remove('fa-eye');
+                toggleBtn.classList.add('fa-eye-slash');
+            } else {
+                pwdInput.type = 'password';
+                toggleBtn.classList.remove('fa-eye-slash');
+                toggleBtn.classList.add('fa-eye');
+            }
+        }
+
+        // Switch Form Mode (Login vs Register)
+        function switchForm(mode) {
+            currentMode = mode;
+            const tabLogin = document.getElementById('tabLogin');
+            const tabRegister = document.getElementById('tabRegister');
+            const formTitle = document.getElementById('formTitle');
+            const formSubtitle = document.getElementById('formSubtitle');
+            const fullNameGroup = document.getElementById('fullNameGroup');
+            const rememberRow = document.getElementById('rememberRow');
+            const forgotLink = document.getElementById('forgotLink');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (mode === 'register') {
+                tabLogin.classList.remove('active');
+                tabRegister.classList.add('active');
+                formTitle.textContent = 'Tạo Tài Khoản Mới';
+                formSubtitle.textContent = 'Nhập thông tin cá nhân của bạn để bắt đầu';
+                fullNameGroup.style.display = 'block';
+                rememberRow.style.display = 'none';
+                forgotLink.style.display = 'none';
+                submitBtn.querySelector('span').textContent = 'Đăng Ký Tài Khoản';
+            } else {
+                tabRegister.classList.remove('active');
+                tabLogin.classList.add('active');
+                formTitle.textContent = 'Chào mừng trở lại';
+                formSubtitle.textContent = 'Vui lòng nhập thông tin để đăng nhập tài khoản';
+                fullNameGroup.style.display = 'none';
+                rememberRow.style.display = 'flex';
+                forgotLink.style.display = 'inline';
+                submitBtn.querySelector('span').textContent = 'Đăng Nhập Ngay';
+            }
+        }
+
+        // Handle Form Submit
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('emailInput').value;
+
+            if (currentMode === 'login') {
+                showToast(`Xin chào ${email}, Đăng nhập thành công!`);
+                setTimeout(() => {
+                    window.location.href = 'account.html';
+                }, 1500);
+            } else {
+                showToast('Đăng ký thành công! Đang chuyển đến màn hình đăng nhập...');
+                setTimeout(() => {
+                    switchForm('login');
+                }, 1800);
+            }
+        }
+
+        // Social Login Handler
+        function socialLogin(provider) {
+            showToast(`Đang kết nối đến tài khoản ${provider}...`);
+        }
+
+        // Forgot Password
+        function forgotPassword(event) {
+            event.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            showToast(`Đã gửi liên kết khôi phục mật khẩu tới: ${email}`);
+        }
+
+        // Toast Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
